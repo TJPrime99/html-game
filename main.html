@@ -41,9 +41,8 @@
                 this.speedY = 0;
                 this.x = x;
                 this.y = y;
-                this.gravity = 0;
+                this.gravityForce = 0.2;
                 this.gravitySpeed = 0;
-
                 this.image = new Image(this.width, this.height);
                 this.image.src = sprite;
 
@@ -56,7 +55,7 @@
 
                 this.gravity = function(locked){
                     if (locked == false){
-                        this.gravitySpeed += this.gravity;
+                        this.gravitySpeed += this.gravityForce;
                         this.y += this.speedY + this.gravitySpeed;
                         this.hitBottom();
                     }
