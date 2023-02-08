@@ -1,0 +1,83 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <style>
+            canvas {
+                border:1px solid #d3d3d3;
+                background-color: #f1f1f1;
+            }
+            </style>
+    </head>
+
+    <body onload="startGame()">
+        <script>
+            var player;
+
+            function startGame(){
+                player = new entity("Rocket V2.png", 10, 10, 100, 100, "sprite");
+                myGameArea.start();
+            }
+
+            var myGameArea = {
+                canvas : document.createElement("canvas"),
+                start : function() {
+                    this.canvas.width = 1280;
+                    this.canvas.height = 720;
+                    this.context = this.canvas.getContext("2d");
+                    document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+                    this.frameNo = 0;
+                    this.interval = setInterval(updateGame, 20);
+                    },
+                clear : function() {
+                    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                }
+            }
+
+            function entity(sprite, x, y, width, height, type) {
+                this.type = type
+                this.width = width;
+                this.height = height;
+                this.speedX = 0;
+                this.speedY = 0;
+                this.x = x;
+                this.y = y;
+                this.gravity = 0;
+                this.gravitySpeed = 0;
+
+                this.image = new Image(this.width, this.height);
+                this.image.src = sprite;
+
+                this.update = function() {
+                    ctx = myGameArea.context;
+                    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+
+                    this.gravity(false);
+                }
+
+                this.gravity = function(locked){
+                    if (locked == false){
+                        this.gravitySpeed += this.gravity;
+                        this.y += this.speedY + this.gravitySpeed;
+                        this.hitBottom();
+                    }
+                }
+
+                this.hitBottom = function() {
+                    var rockbottom = myGameArea.canvas.height - this.height;
+                    if (this.y > rockbottom) {
+                        this.y = rockbottom;
+                        this.gravitySpeed = 0;
+                    }
+    }
+            }
+
+            function updateGame(){
+                myGameArea.clear();
+
+                myGameArea.frameNo += 1;
+
+                player.update();
+            }
+        </script>
+    </body>
+</html>
